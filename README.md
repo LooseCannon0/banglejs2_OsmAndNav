@@ -15,8 +15,7 @@ over Bluetooth by [Gadgetbridge](https://gadgetbridge.org/).
 - Distance turns yellow under 1 mile and red under 0.5 miles
 - "then:" preview of the following turn when OsmAnd announces chained
   instructions
-- Bottom bar: current time (left) and GPS heading (right, 8-point compass,
-  updates while moving)
+- Bottom bar: current time
 - Screen stays awake while the app is open; backlight only turns on after a
   configurable hour (default 19:00) - the Bangle's sunlight-readable screen
   doesn't need it during the day
@@ -55,4 +54,3 @@ instructions (works in the Web IDE emulator).
   does not transmit it
 - The street text updates when OsmAnd fires a voice prompt; the distance
   updates continuously
-- GPS is kept on for the heading display, which increases battery drain

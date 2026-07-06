@@ -5,7 +5,7 @@
  * - Street name extracted from OsmAnd's voice-prompt text, auto-sized + wrapped
  * - Drawn turn arrows, color-coded distance (yellow <1mi, red <0.5mi)
  * - "then" preview of the following turn
- * - Current time + GPS heading in the bottom bar
+ * - Current time in the bottom bar
  * - Screen always awake; backlight always on/off/scheduled (see Settings app)
  * - Buzz on new instruction (toggle in Settings app)
  *
@@ -24,7 +24,6 @@ var settings = Object.assign({
 
 var current;              // last nav message received
 var lastInstrKey = "";    // for change detection (buzz)
-var heading = null;       // GPS course in degrees, null until first good fix
 
 // ---------- unit conversion ----------
 // Gadgetbridge sends distance as "<meters>m" (string) from OsmAnd
@@ -246,18 +245,11 @@ function timeStr() {
   }
 }
 
-function headingStr() {
-  if (heading === null) return "--";
-  var dirs = ["N","NE","E","SE","S","SW","W","NW"];
-  return dirs[Math.round(heading / 45) % 8];
-}
-
 function drawBottom() {
   var W = g.getWidth(), H = g.getHeight();
   g.reset().clearRect(0, H - 26, W - 1, H - 1);
   g.setFont("Vector", 22);
   g.setFontAlign(-1, 1).drawString(timeStr(), 4, H - 2);
-  g.setFontAlign(1, 1).drawString(headingStr(), W - 4, H - 2);
 }
 
 // ---------- nav message handling ----------
@@ -286,17 +278,6 @@ global.GB = function(e) {
   if (e && e.t == "nav") return onNav(e);
   if (oldGB) oldGB(e);
 };
-
-// ---------- GPS heading ----------
-Bangle.setGPSPower(1, "osmandnav");
-Bangle.on("GPS", function(fix) {
-  // course is noise when stopped; only trust it above ~5 km/h
-  if (fix.fix && fix.speed > 5 && !isNaN(fix.course)) {
-    var old = headingStr();
-    heading = fix.course;
-    if (headingStr() != old) drawBottom();
-  }
-});
 
 // ---------- setup ----------
 // screen stays awake and unlocked; backlight only during the night window
@@ -328,7 +309,6 @@ var demoData = [
 ];
 function demoNext() { onNav(demoData[demoIdx++ % demoData.length]); }
 if (DEMO) {
-  heading = 225; // SW
   var demoTimer = setInterval(demoNext, 3000);
 }
 
@@ -340,7 +320,6 @@ Bangle.setUI({
 
 E.on("kill", function() {
   global.GB = oldGB;
-  Bangle.setGPSPower(0, "osmandnav");
   Bangle.setLCDTimeout(10);
   var s = require("Storage").readJSON("setting.json", 1) || {};
   Bangle.setLCDBrightness(s.brightness === undefined ? 1 : s.brightness);
