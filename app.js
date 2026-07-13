@@ -227,11 +227,13 @@ function draw() {
 
   // --- "then" preview of the following turn ---
   if (ci.next) {
-    g.setColor(g.theme.fg).setFont("Vector", 14).setFontAlign(0, 1);
+    g.setColor(g.theme.fg).setFont("Vector", 14).setFontAlign(-1, 1);
     var nx = "then: " + ci.next;
-    while (g.stringWidth(nx) > W-4 && nx.length > 8)
+    // the ft/mi unit label under the distance overlaps this line's right end
+    var maxW = d ? W - 46 : W - 6;
+    while (g.stringWidth(nx) > maxW && nx.length > 8)
       nx = nx.slice(0, -4) + "...";
-    g.drawString(nx, W/2, g.getHeight() - 28);
+    g.drawString(nx, 2, g.getHeight() - 28);
   }
 
   drawBottom();
@@ -308,9 +310,7 @@ var demoData = [
   {t:"nav", instr:"Turn right onto Main St and arrive at your destination", distance:"30m", action:"finish"}
 ];
 function demoNext() { onNav(demoData[demoIdx++ % demoData.length]); }
-if (DEMO) {
-  var demoTimer = setInterval(demoNext, 3000);
-}
+if (DEMO) setInterval(demoNext, 3000);
 
 Bangle.setUI({
   mode: "custom",
@@ -320,8 +320,8 @@ Bangle.setUI({
 
 E.on("kill", function() {
   global.GB = oldGB;
-  Bangle.setLCDTimeout(10);
   var s = require("Storage").readJSON("setting.json", 1) || {};
+  Bangle.setLCDTimeout(s.timeout === undefined ? 10 : s.timeout);
   Bangle.setLCDBrightness(s.brightness === undefined ? 1 : s.brightness);
 });
 

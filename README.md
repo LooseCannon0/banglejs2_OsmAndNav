@@ -3,8 +3,6 @@
 Turn-by-turn navigation display for [OsmAnd](https://osmand.net/), delivered
 over Bluetooth by [Gadgetbridge](https://gadgetbridge.org/).
 
-![screenshot](screenshot.png)
-
 ## Features
 
 - Street name of the next turn, auto-sized and word-wrapped to fit the screen
@@ -17,7 +15,7 @@ over Bluetooth by [Gadgetbridge](https://gadgetbridge.org/).
   instructions
 - Bottom bar: current time
 - Screen stays awake while the app is open; backlight only turns on after a
-  configurable hour (default 19:00) - the Bangle's sunlight-readable screen
+  configurable hour (default 18:00) - the Bangle's sunlight-readable screen
   doesn't need it during the day
 - Vibrates when a new instruction arrives
 
