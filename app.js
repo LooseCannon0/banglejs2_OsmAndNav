@@ -1,7 +1,7 @@
 /* OsmAnd Navigation - Bangle.js 2 turn-by-turn display
  * for OsmAnd via Gadgetbridge (Android Integration app required)
  *
- * - Imperial units (ft/mi) converted on-watch
+ * - Imperial (ft/mi) or metric (m/km) units, converted on-watch
  * - Street name extracted from OsmAnd's voice-prompt text, auto-sized + wrapped
  * - Drawn turn arrows, color-coded distance (yellow <1mi, red <0.5mi)
  * - "then" preview of the following turn
@@ -18,6 +18,7 @@ var DEMO = false;         // true = cycle fake nav data for testing
 // user settings (edit in Settings -> Apps -> OsmAnd Nav)
 var settings = Object.assign({
   buzz: true,
+  metric: false,     // false = imperial (ft/mi), true = metric (m/km)
   backlight: 2,      // 0=always off, 1=always on, 2=auto after backlightHour
   backlightHour: 18
 }, require("Storage").readJSON("osmandnav.json", true) || {});
@@ -36,9 +37,19 @@ function distMeters(d) {
 function fmtDistance(d) {
   var m = distMeters(d);
   if (isNaN(m)) return null;
+  var r;
+  if (settings.metric) {
+    if (m < 1000) {
+      r = (m < 100) ? 10 : 50; // round for stability
+      return { num: Math.round(m / r) * r, unit: "m" };
+    }
+    var km = m / 1000;
+    if (km < 10) return { num: km.toFixed(1), unit: "km" };
+    return { num: Math.round(km), unit: "km" };
+  }
   var ft = m * 3.28084;
   if (ft < 1000) {
-    var r = (ft < 200) ? 10 : 50; // round for stability
+    r = (ft < 200) ? 10 : 50;
     return { num: Math.round(ft / r) * r, unit: "ft" };
   }
   var mi = m / 1609.344;
@@ -213,8 +224,10 @@ function draw() {
     var tw = g.stringWidth(ds), cy = 96;
     var badge = null; // [bg, text]
     if (!isNaN(m)) {
-      if (m < 805) badge = ["#f00", "#fff"];       // < 0.5 mi
-      else if (m < 1609) badge = ["#ff0", "#000"]; // < 1 mi
+      // red < 0.5 mi / 500 m, yellow < 1 mi / 1 km
+      var red = settings.metric ? 500 : 805, yel = settings.metric ? 1000 : 1609;
+      if (m < red) badge = ["#f00", "#fff"];
+      else if (m < yel) badge = ["#ff0", "#000"];
     }
     if (badge) {
       g.setColor(badge[0]).fillRect(W-14-tw, cy-fs/2-2, W-2, cy+fs/2+2);

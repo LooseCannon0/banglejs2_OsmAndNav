@@ -6,11 +6,13 @@ over Bluetooth by [Gadgetbridge](https://gadgetbridge.org/).
 ## Features
 
 - Street name of the next turn, auto-sized and word-wrapped to fit the screen
-- Distance in imperial units (feet under 1000 ft, then miles), converted on
-  the watch from the raw meters Gadgetbridge sends
+- Distance in imperial (feet under 1000 ft, then miles) or metric (meters
+  under 1 km, then kilometers) units, converted on the watch from the raw
+  meters Gadgetbridge sends
 - Turn arrows drawn on the fly (turns, keeps, u-turns, roundabouts with exit
   number)
-- Distance turns yellow under 1 mile and red under 0.5 miles
+- Distance turns yellow under 1 mile (1 km in metric) and red under
+  0.5 miles (500 m)
 - "then:" preview of the following turn when OsmAnd announces chained
   instructions
 - Bottom bar: current time
@@ -37,6 +39,7 @@ them. Press the button to exit.
 
 On the watch: Settings -> Apps -> OsmAnd Nav
 
+- **Units** - Imperial (ft/mi, default) or Metric (m/km)
 - **Vibrate** - buzz when a new instruction arrives (default on)
 - **Backlight** - Always off / Always on / Auto (on after a chosen hour,
   default 18:00). The screen itself always stays awake while the app is open.
