@@ -3,6 +3,8 @@
 Turn-by-turn navigation display for [OsmAnd](https://osmand.net/), delivered
 over Bluetooth by [Gadgetbridge](https://gadgetbridge.org/).
 
+![screenshot](screenshot.png)
+
 ## Features
 
 - Street name of the next turn, auto-sized and word-wrapped to fit the screen
