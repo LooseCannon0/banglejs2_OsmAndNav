@@ -2,7 +2,7 @@
   "id": "osmandnav",
   "name": "OsmAnd Navigation",
   "shortName": "OsmAnd Nav",
-  "version": "0.13",
+  "version": "0.14",
   "description": "Turn-by-turn navigation display for OsmAnd via Gadgetbridge. Imperial units, big auto-wrapping street names, drawn turn arrows, color-coded distance, next-turn preview, scheduled backlight.",
   "icon": "app.png",
   "type": "app",
